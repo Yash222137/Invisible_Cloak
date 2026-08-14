@@ -6,6 +6,10 @@ def main():
     print("Starting webcam...")
     cap = cv2.VideoCapture(0)
 
+    if not cap.isOpened():
+        print("Error: Could not open webcam.")
+        return
+
     # Allow camera to warm up
     time.sleep(2)
     background = 0
@@ -47,7 +51,7 @@ def main():
         # Create masks for red color
         mask1 = cv2.inRange(hsv, lower_red1, upper_red1)
         mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
-        mask = mask1 + mask2
+        mask = cv2.bitwise_or(mask1, mask2)
 
         # Morphological operations to remove noise and smoothen the mask
         # Opening removes noise, dilation expands the mask slightly to cover edges
